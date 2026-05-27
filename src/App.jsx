@@ -24,62 +24,61 @@ function App() {
   }, []);
 
   const handleConvert = async () => {
-    if (!inputCode.trim()) {
-      setFeedBack("Please Enter Some Code To Convert!!");
-      return;
-    } 
-    if (!aiReady) {
-      setFeedBack("AI Is Not Available!!");
-      return;
-    }
-    
-    setLoading(true); 
-    setFeedBack(""); 
-    setOutPutCode("");
-  
-    try {
-      // ۲. اصلاح فراخوانی API به window.puter.ai.chat
-      const response = await window.puter.ai.chat(
-      `Convert this code to ${targetLanguage}. Return only raw code.\n${inputCode}`
+  if (!inputCode.trim()) {
+    setFeedBack("Please Enter Some Code To Convert!!");
+    return;
+  }
+
+  if (!aiReady) {
+    setFeedBack("AI Is Not Available!!");
+    return;
+  }
+
+  setLoading(true);
+  setFeedBack("");
+  setOutPutCode("");
+
+  try {
+    const response = await window.puter.ai.chat(
+      `Convert this code to ${targetLanguage}. Return ONLY raw code, no markdown.\n${inputCode}`
     );
 
-      console.log(response);
+    console.log(response);
 
-      if (typeof response === "string") {
-        reply = response;
-      } else if (response?.message?.content) {
-        reply = response.message.content;
-      } else if (response?.content) {
-        reply = response.content;
-      } else {
-        reply = JSON.stringify(response);
-      }
+    let reply = "";
 
-      if (!String(reply).trim()) {
-        throw new Error("Empty response from AI");
-      }
-
-      const cleanReply = String(reply)
-        .replace(/```[\w]*\n?/g, "")
-        .replace(/```/g, "")
-        .trim();
-
-      setOutPutCode(cleanReply);
-      
-      // اصلاح مدیریت پاسخ هوش مصنوعی
-      const reply = typeof response === "string" ? response : response?.message?.content || "";
-      
-      if (!reply.trim()) throw new Error("Empty Response From AI");
-      console.log("AI response:", response);
-      console.log(typeof response); 
-      setOutPutCode(reply.trim()); 
-      setFeedBack("Conversion Was Successful!");
-    } catch (error) {
-      console.error(error);
-      setFeedBack(`Error: ${error.message}`);
+    if (typeof response === "string") {
+      reply = response;
+    } 
+    else if (Array.isArray(response?.message?.content)) {
+      reply = response.message.content[0]?.text || "";
+    } 
+    else if (response?.message?.content) {
+      reply = response.message.content;
+    } 
+    else {
+      reply = JSON.stringify(response);
     }
-    setLoading(false);
-  }; 
+
+    const cleanReply = String(reply)
+      .replace(/```[\w]*\n?/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    if (!cleanReply) {
+      throw new Error("Empty Response From AI");
+    }
+
+    setOutPutCode(cleanReply);
+    setFeedBack("Conversion Was Successful!");
+
+  } catch (error) {
+    console.error(error);
+    setFeedBack(`Error: ${error.message}`);
+  }
+
+  setLoading(false);
+  };
 
   const handleReset = () => {
     setInputCode(`function helloWorld(){\n  console.log("Hello World!")\n}`);
@@ -128,7 +127,7 @@ function App() {
             <RotateCcw className="w-5 h-5"/>Reset
           </button>
       </div>
-      <div className="grid grid-cols-1 lg:grod-cols-2 gap-8 w-full max-w-7xl relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl relative z-10">
         <div className="bg-slate-900/80 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md">
           <div className="bg-slate-800/80 py-3 border-b border-slate-700  flex flex-col gap-2">
             <div className="flex items-center gap-2 px-4">
@@ -155,9 +154,15 @@ function App() {
       </div>
       {
         feedBack && (
-          <p className={`text-center font-semibold text-white drop-shadow-md relative z-10 ${
-            feedBack.includes("Succesful" || "ClipBoard") ? `text-emerald-300` : `text-rose-300`
-          }`}></p>
+          <p
+          className={`text-center font-semibold relative z-10 ${
+            feedBack.includes("Successful")
+              ? "text-emerald-300"
+              : "text-rose-300"
+          }`}
+        >
+          {feedBack}
+        </p>
         )
       }
       {
