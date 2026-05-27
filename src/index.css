@@ -1,1 +1,12 @@
 @import "tailwindcss";
+@tailwind utilities;
+
+:root {
+  --primary-title: #e2eafd;
+  --secandary-title: #aabbf7;
+  --secondary: #8897f1;
+  --bg: #2b2c69;
+  --bg-box: #1e1e48;
+  --box-outline:#eff3fe; 
+
+}

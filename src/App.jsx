@@ -8,73 +8,72 @@ import {dracula} from "@uiw/codemirror-theme-dracula"
 
 function App() {
   const [aiReady, setAiReady] = useState(false); 
-  const [inputCode, setInputCode] = useState(`
-    function helloWorld(){\n
-      console.log("Hello World!")
-    }
-    `); 
+  const [inputCode, setInputCode] = useState(`function helloWorld(){\n  console.log("Hello World!")\n}`); 
   const [outPutCode, setOutPutCode] = useState("");
   const [targetLanguage, setTargetLanguage] = useState("Python");
-  const [loading, setLoading] = useState("false"); 
-  const [feedBack, setFeedBack] = useState("");
-
+  const [loading, setLoading] = useState(false); 
+  const [feedBack, setFeedBack] = useState(""); 
   useEffect(() => {
     const checkReady = setInterval(() => {
-      if(window.puter?.ai.chat){
-        setAiReady(true)
-        clearInterval(checkReady)
+      if (window.puter?.ai?.chat) {
+        setAiReady(true);
+        clearInterval(checkReady);
       }
-    },300)
-    return () => clearInterval(checkReady)
-  }, [])
+    }, 300);
+    return () => clearInterval(checkReady);
+  }, []);
 
-  const handleConvert = async()=>{
-    if(!inputCode.trim()){
-      setFeedBack("Please Enter Some Code To Convert!!")
-      return
-    } if(!aiReady) {
-      setFeedBack("AI Is Not Available!!")
-      return
+  const handleConvert = async () => {
+    if (!inputCode.trim()) {
+      setFeedBack("Please Enter Some Code To Convert!!");
+      return;
+    } 
+    if (!aiReady) {
+      setFeedBack("AI Is Not Available!!");
+      return;
     }
+    
     setLoading(true); 
     setFeedBack(""); 
     setOutPutCode("");
   
     try {
-      const response = await window.ai.chat(
-        `
-          convert the code into ${targetLanguage}
-          Only Return the Code, no explanations
-          Code: 
-          ${inputCode}
-        `
+      // ۲. اصلاح فراخوانی API به window.puter.ai.chat
+      const response = await window.puter.ai.chat(
+        `convert the code into ${targetLanguage}. Only Return the Code, no explanations. Code: \n${inputCode}`
       ); 
-      const reply = typeof response === "string" ? response: response?.message?.content || res?.message?.map((m) => m.content).join("\n") || "";
-      if(!reply.trim()) throw new Error("Empty Response From AI")
+      
+      // اصلاح مدیریت پاسخ هوش مصنوعی
+      const reply = typeof response === "string" ? response : response?.message?.content || "";
+      
+      if (!reply.trim()) throw new Error("Empty Response From AI");
+      
       setOutPutCode(reply.trim()); 
-      setFeedBack("Conversion Was Succesful")
+      setFeedBack("Conversion Was Successful!");
     } catch (error) {
-      console.log(error);
-      setFeedBack(`Error: ${error.message}`)
+      console.error(error);
+      setFeedBack(`Error: ${error.message}`);
     }
-    setLoading(false)
+    setLoading(false);
   }; 
 
-  const handleReset = () =>{
-    setInputCode(`
-    function helloWorld(){\n
-      console.log("Hello World!")
+  const handleReset = () => {
+    setInputCode(`function helloWorld(){\n  console.log("Hello World!")\n}`);
+    setFeedBack("");
+    setOutPutCode("");
+  };
+
+  const handleCopy = async () => {
+    if (outPutCode) {
+      try {
+        // ۳. اصلاح غلط املایی writeText
+        await navigator.clipboard.writeText(outPutCode);
+        setFeedBack("Code Copied to The Clipboard!");
+      } catch (err) {
+        setFeedBack("Failed to copy code.");
+      }
     }
-    `)
-    setFeedBack("")
-    setOutPutCode("")
-  }
-  const handleCopy = async() => {
-    if(outPutCode) {
-      await navigator.clipboard.writreText(outPutCode);
-      setFeedBack("Code Copied to The ClipBoard!")
-    }
-  }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-slate-950 to-purple-950 flex flex-col items-center justify-center p-6 gap-10 relative overflow-hidden">
       <h1 className="text-5xl sm:text-7xl font-extrabold bg-gradient-to-r from-cyan-400 via-violet-400 to-pink-400 bg-clip-text text-transparent text-center drop-shadow-lg relative">
@@ -106,14 +105,14 @@ function App() {
           </button>
       </div>
       <div className="grid grid-cols-1 lg:grod-cols-2 gap-8 w-full max-w-7xl relative z-10">
-        <div className="bg-slate-900/80 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md ">
-          <div className="bg-slate-800/80 py-3 border-b border-slate-700 px-4 flex items-center gap-2 "> 
-            <Code className="w-5 h-5 text-cyan-400" /> 
-            <span className="text-white font-semibold">Input Code</span>
-            <div>
+        <div className="bg-slate-900/80 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md">
+          <div className="bg-slate-800/80 py-3 border-b border-slate-700  flex flex-col gap-2">
+            <div className="flex items-center gap-2 px-4">
+              <Code className="w-5 h-5 text-cyan-400" /> 
+              <span className="text-white font-semibold">Input Code</span>
+            </div>
               <CodeMirror value={inputCode} height="420px" extensions={[javascript({jsx:true})]} theme={dracula}
               onChange={(userCode)=>setInputCode(userCode)}/>
-            </div>
           </div>
         </div>
         <div className="bg-slate-900/80 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-md">
