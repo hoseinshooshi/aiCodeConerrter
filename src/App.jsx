@@ -40,14 +40,38 @@ function App() {
     try {
       // ۲. اصلاح فراخوانی API به window.puter.ai.chat
       const response = await window.puter.ai.chat(
-        `convert the code into ${targetLanguage}. Only Return the Code, no explanations. Code: \n${inputCode}`
-      ); 
+      `Convert this code to ${targetLanguage}. Return only raw code.\n${inputCode}`
+    );
+
+      console.log(response);
+
+      if (typeof response === "string") {
+        reply = response;
+      } else if (response?.message?.content) {
+        reply = response.message.content;
+      } else if (response?.content) {
+        reply = response.content;
+      } else {
+        reply = JSON.stringify(response);
+      }
+
+      if (!String(reply).trim()) {
+        throw new Error("Empty response from AI");
+      }
+
+      const cleanReply = String(reply)
+        .replace(/```[\w]*\n?/g, "")
+        .replace(/```/g, "")
+        .trim();
+
+      setOutPutCode(cleanReply);
       
       // اصلاح مدیریت پاسخ هوش مصنوعی
       const reply = typeof response === "string" ? response : response?.message?.content || "";
       
       if (!reply.trim()) throw new Error("Empty Response From AI");
-      
+      console.log("AI response:", response);
+      console.log(typeof response); 
       setOutPutCode(reply.trim()); 
       setFeedBack("Conversion Was Successful!");
     } catch (error) {
