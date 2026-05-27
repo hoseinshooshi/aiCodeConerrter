@@ -111,7 +111,7 @@ function App() {
             <option value={language} key={language}>{language}</option>
           ))}
         </select>
-        <button onClick={handleConvert} disabled={!aiReady || loading} className="relative flex items-center px-4 py-2 overflow-hidden font-medium transition-all bg-indigo-500 rounded-md group">
+        <button onClick={handleConvert} disabled={!aiReady || loading} className="relative curosr-pointer flex items-center px-4 py-2 overflow-hidden font-medium transition-all bg-indigo-500 rounded-md group">
           <span
               className="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-indigo-700 rounded group-hover:-mr-4 group-hover:-mt-4"
             >
@@ -134,7 +134,7 @@ function App() {
           >
           </span>
           <span
-          className="relative w-full gap-2 flex text-left items-center justify-center text-white transition-colors duration-200 ease-in-out group-hover:text-white"
+          className="relative w-full gap-2 flex text-left align-center items-center justify-center text-white transition-colors duration-200 ease-in-out group-hover:text-white"
             >
             {
               loading? (
@@ -148,10 +148,19 @@ function App() {
             }
           </span>
           </button>
-          <button onClick={handleReset} disabled={loading} className="cursor-pointer px-4 z-30 py-2 bg-rose-400 rounded-md text-white relative flex after:-z-20 after:absolute after:h-1 after:w-1 after:bg-rose-800 after:left-5 overflow-hidden after:bottom-0 after:translate-y-full after:rounded-md after:hover:scale-[300] after:hover:transition-all after:hover:duration-700 after:transition-all after:duration-700 transition-all duration-700 [text-shadow:3px_5px_2px_#be123c;] hover:[text-shadow:2px_2px_2px_#fda4af] text-2xl">
-            <div className="flex items-center justify-center gap-2 ">
-              <RotateCcw className="w-5 h-5"/>Reset
-            </div>
+          <button onClick={handleReset} disabled={loading} className="cursor-pointer inline-block rounded-md font-medium border-2 border-rose-500 text-rose-500 hover:border-rose-600 hover:bg-rose-400 hover:bg-opacity-10 hover:text-rose-600 focus:border-rose-700 focus:text-rose-700 active:border-rose-800 active:text-rose-800 dark:border-rose-300 dark:text-rose-300 dark:hover:hover:bg-rose-300 px-4 py-2 uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0">
+              <div
+                role="status"
+                className="inline-block align-[-0.125em]"
+              >
+                <RotateCcw className="w-5 h-5"/>
+                <span
+                  className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+                >
+                  Loading...
+                </span>
+              </div>
+              Reset
           </button>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl relative z-10">
