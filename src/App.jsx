@@ -111,19 +111,40 @@ function App() {
             <option value={language} key={language}>{language}</option>
           ))}
         </select>
-        <button onClick={handleConvert} disabled={!aiReady || loading} className="px-6 py-3 bg-gradient-to-r from-violet-500 to-cyan-500 hover:opacity-80 active:scale-95 text-white font-semibold rounded-2xl transition-all flex items-center gap-2 disabled:opacity-50 shadow-lg cursor-pointer">
+        <button onClick={handleConvert} disabled={!aiReady || loading} className="relative flex items-center px-6 py-3 overflow-hidden font-medium transition-all bg-indigo-500 rounded-md group">
+          <span
+            className="absolute top-0 right-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-indigo-700 rounded group-hover:-mr-4 group-hover:-mt-4"
+          >
+          <span
+            className="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"
+          ></span>
+        </span>
+        <span
+          className="absolute bottom-0 rotate-180 left-0 inline-block w-4 h-4 transition-all duration-500 ease-in-out bg-indigo-700 rounded group-hover:-ml-4 group-hover:-mb-4"
+        >
+          <span
+            className="absolute top-0 right-0 w-5 h-5 rotate-45 translate-x-1/2 -translate-y-1/2 bg-white"
+          ></span>
+        </span>
+        <span
+          className="absolute bottom-0 left-0 w-full h-full transition-all duration-500 ease-in-out delay-200 -translate-x-full bg-indigo-600 rounded-md group-hover:translate-x-0"
+        ></span>
+        <span
+          className="relative w-full text-left text-white transition-colors duration-200 ease-in-out group-hover:text-white"
+          >
           {
             loading? (
               <Loader2 className="w-5 h-5 animate-spin"/>
             ) : (
-              <Play className="w-5 h-5 " />
+              <Play className="w-5 h-5" />
             )
           }
           {
             loading?"Please Wait..":"Convert" 
           }
+          </span>
           </button>
-          <button onClick={handleReset} disabled={loading} className="px-6 py-3 bg-gradient-to-r from-rose-500 to-orange-500 hover:opacity-80 active:scale-95 text-white font-semibold rounded-2xl transition-all flex items-center gap-2 shadow-lg cursor-pointer">
+          <button onClick={handleReset} disabled={loading} className="px-8 z-30 py-4 bg-rose-400 rounded-md text-white relative font-semibold after:-z-20 after:absolute after:h-1 after:w-1 after:bg-rose-800 after:left-5 overflow-hidden after:bottom-0 after:translate-y-full after:rounded-md after:hover:scale-[300] after:hover:transition-all after:hover:duration-700 after:transition-all after:duration-700 transition-all duration-700 [text-shadow:3px_5px_2px_#be123c;] hover:[text-shadow:2px_2px_2px_#fda4af] text-2xl">
             <RotateCcw className="w-5 h-5"/>Reset
           </button>
       </div>
@@ -144,9 +165,32 @@ function App() {
               <CheckCircle className="w-5 h-5 text-emerald-400" />
               <span className="text-white font-semibold">Converted Code to ({targetLanguage})</span>
             </div>
-            <button onClick={handleCopy} disabled={!outPutCode} className="flex items-center gap-1 text-sm px-3 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded-lg disabled:opacity-50">
-              <Clipboard className="w-4 h-4" />
-            </button>
+            <div className="centralize">
+              <div>
+                <button onClick={handleCopy} disabled={!outPutCode} >
+                  <span>
+                    <svg
+                      width="12"
+                      height="12"
+                      fill="#0E418F"
+                      xmlns="http://www.w3.org/2000/svg"
+                      shape-rendering="geometricPrecision"
+                      text-rendering="geometricPrecision"
+                      image-rendering="optimizeQuality"
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      viewBox="0 0 467 512.22"
+                    >
+                      <path
+                        fill-rule="nonzero"
+                        d="M131.07 372.11c.37 1 .57 2.08.57 3.2 0 1.13-.2 2.21-.57 3.21v75.91c0 10.74 4.41 20.53 11.5 27.62s16.87 11.49 27.62 11.49h239.02c10.75 0 20.53-4.4 27.62-11.49s11.49-16.88 11.49-27.62V152.42c0-10.55-4.21-20.15-11.02-27.18l-.47-.43c-7.09-7.09-16.87-11.5-27.62-11.5H170.19c-10.75 0-20.53 4.41-27.62 11.5s-11.5 16.87-11.5 27.61v219.69zm-18.67 12.54H57.23c-15.82 0-30.1-6.58-40.45-17.11C6.41 356.97 0 342.4 0 326.52V57.79c0-15.86 6.5-30.3 16.97-40.78l.04-.04C27.51 6.49 41.94 0 57.79 0h243.63c15.87 0 30.3 6.51 40.77 16.98l.03.03c10.48 10.48 16.99 24.93 16.99 40.78v36.85h50c15.9 0 30.36 6.5 40.82 16.96l.54.58c10.15 10.44 16.43 24.66 16.43 40.24v302.01c0 15.9-6.5 30.36-16.96 40.82-10.47 10.47-24.93 16.97-40.83 16.97H170.19c-15.9 0-30.35-6.5-40.82-16.97-10.47-10.46-16.97-24.92-16.97-40.82v-69.78zM340.54 94.64V57.79c0-10.74-4.41-20.53-11.5-27.63-7.09-7.08-16.86-11.48-27.62-11.48H57.79c-10.78 0-20.56 4.38-27.62 11.45l-.04.04c-7.06 7.06-11.45 16.84-11.45 27.62v268.73c0 10.86 4.34 20.79 11.38 27.97 6.95 7.07 16.54 11.49 27.17 11.49h55.17V152.42c0-15.9 6.5-30.35 16.97-40.82 10.47-10.47 24.92-16.96 40.82-16.96h170.35z"
+                      ></path>
+                    </svg>
+                    Copy Code</span>
+                  <span>Copied</span>
+                </button>
+              </div>
+            </div>
           </div>
           <CodeMirror value={outPutCode} height="420px" extensions={[javascript({jsx:true})]}
           theme={dracula} editable={false} />
