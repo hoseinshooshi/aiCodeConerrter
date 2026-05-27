@@ -134,7 +134,7 @@ function App() {
           >
           </span>
           <span
-          className="relative w-full flex text-left text-white transition-colors duration-200 ease-in-out group-hover:text-white"
+          className="relative w-full flex text-left items-center justify-center text-white transition-colors duration-200 ease-in-out group-hover:text-white"
             >
             {
               loading? (
@@ -149,7 +149,9 @@ function App() {
           </span>
           </button>
           <button onClick={handleReset} disabled={loading} className="cursor-pointer px-8 z-30 py-4 bg-rose-400 rounded-md text-white relative flex font-semibold after:-z-20 after:absolute after:h-1 after:w-1 after:bg-rose-800 after:left-5 overflow-hidden after:bottom-0 after:translate-y-full after:rounded-md after:hover:scale-[300] after:hover:transition-all after:hover:duration-700 after:transition-all after:duration-700 transition-all duration-700 [text-shadow:3px_5px_2px_#be123c;] hover:[text-shadow:2px_2px_2px_#fda4af] text-2xl">
-            <RotateCcw className="w-5 h-5"/>Reset
+            <div className="flex items-center justify-center ">
+              <RotateCcw className="w-5 h-5"/>Reset
+            </div>
           </button>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl relative z-10">
@@ -170,11 +172,9 @@ function App() {
               <span className="text-white font-semibold">Converted Code to ({targetLanguage})</span>
             </div>
             <div className="centralize">
-              <div>
-                <button onClick={handleCopy} disabled={!outPutCode} >
+                <button onClick={handleCopy} disabled={!outPutCode} className="curosr=pointer" >
                   <Clipboard className="w-5 h-5 text-cyan-400" /> 
                 </button>
-              </div>
             </div>
           </div>
           <CodeMirror value={outPutCode} height="420px" extensions={[javascript({jsx:true})]}
