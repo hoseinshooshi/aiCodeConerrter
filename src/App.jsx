@@ -148,7 +148,7 @@ function App() {
             }
           </span>
           </button>
-          <button onClick={handleReset} disabled={loading} className="cursor-pointer inline-block rounded-md font-medium border-2 border-rose-500 text-rose-500 hover:border-rose-600 hover:bg-rose-400 hover:bg-opacity-10 hover:text-rose-600 focus:border-rose-700 focus:text-rose-700 active:border-rose-800 active:text-rose-800 dark:border-rose-300 dark:text-rose-300 dark:hover:hover:bg-rose-300 px-4 py-2 uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0">
+          <button onClick={handleReset} disabled={loading} className="cursor-pointer gap-2 flex align-center justify-center items-center rounded-md font-medium border-2 border-rose-500 text-rose-500 hover:border-rose-600 hover:bg-rose-400 hover:bg-opacity-10 hover:text-rose-600 focus:border-rose-700 focus:text-rose-700 active:border-rose-800 active:text-rose-800 dark:border-rose-300 dark:text-rose-300 dark:hover:hover:bg-rose-300 px-4 py-2 uppercase leading-normal transition duration-150 ease-in-out focus:outline-none focus:ring-0">
               <div
                 role="status"
                 className="inline-block align-[-0.125em]"
@@ -160,7 +160,9 @@ function App() {
                   Loading...
                 </span>
               </div>
-              Reset
+              <div>
+                Reset
+              </div>
           </button>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-7xl relative z-10">
